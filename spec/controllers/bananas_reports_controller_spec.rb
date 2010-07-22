@@ -34,7 +34,12 @@ describe SpamReportsController do
 
   describe "delete action" do
 
-    it "deletes the report if the user is authorized"
+    it "deletes the report if the user is authorized" do
+      report = BananasReport.create(:ip_address => "127.0.0.1")
+      delete "destroy", :id => report.id, :access => { :login => "login", :password => "password" }
+      flash[:success].should_not be_nil
+      response.should redirect_to(:action => "index")
+    end
 
   end
 

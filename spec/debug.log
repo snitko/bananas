@@ -3971,3 +3971,179 @@
 [0m
   [4;35;1mSQL (0.2ms)[0m   [0mSELECT version FROM "schema_migrations"[0m
   [4;36;1mBananasReport Load (0.2ms)[0m   [0;1mSELECT * FROM "bananas_reports" [0m
+  [4;35;1mSQL (0.2ms)[0m   [0mselect sqlite_version(*)[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (2.0ms)[0m   [0mDROP TABLE "bananas_reports"[0m
+  [4;36;1mSQL (1.6ms)[0m   [0;1mCREATE TABLE "bananas_reports" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "ip_address" varchar(255), "abuser_id" integer, "counter" integer DEFAULT 0, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.4ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (2.2ms)[0m   [0;1mDROP TABLE "bananas_users"[0m
+  [4;35;1mSQL (227.4ms)[0m   [0mCREATE TABLE "bananas_users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "ip_address" varchar(255), "bananas_attempts" integer) [0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSELECT version FROM "schema_migrations"[0m
+  [4;36;1mBananasReport Load (0.2ms)[0m   [0;1mSELECT * FROM "bananas_reports" [0m
+  [4;35;1mBananasReport Load (0.1ms)[0m   [0mSELECT * FROM "bananas_reports" [0m
+  [4;36;1mBananasUser Load (0.1ms)[0m   [0;1mSELECT * FROM "bananas_users" [0m
+  [4;35;1mBananasUser Create (0.3ms)[0m   [0mINSERT INTO "bananas_users" ("bananas_attempts", "login", "ip_address") VALUES(11, NULL, NULL)[0m
+  [4;36;1mBananasReport Load (0.1ms)[0m   [0;1mSELECT * FROM "bananas_reports" WHERE ("bananas_reports"."ip_address" = '127.0.0.1') LIMIT 1[0m
+  [4;35;1mBananasUser Load (0.1ms)[0m   [0mSELECT * FROM "bananas_users" WHERE ("bananas_users"."id" = 1) [0m
+  [4;36;1mBananasUser Update (0.1ms)[0m   [0;1mUPDATE "bananas_users" SET "bananas_attempts" = 0 WHERE "id" = 1[0m
+  [4;35;1mBananasReport Create (0.1ms)[0m   [0mINSERT INTO "bananas_reports" ("created_at", "updated_at", "abuser_id", "counter", "ip_address") VALUES('2010-07-22 23:01:40', '2010-07-22 23:01:40', 1, 1, '127.0.0.1')[0m
+  [4;36;1mBananasReport Load (0.1ms)[0m   [0;1mSELECT * FROM "bananas_reports" [0m
+  [4;35;1mBananasUser Load (0.1ms)[0m   [0mSELECT * FROM "bananas_users" [0m
+  [4;36;1mBananasUser Create (0.2ms)[0m   [0;1mINSERT INTO "bananas_users" ("bananas_attempts", "login", "ip_address") VALUES(11, NULL, NULL)[0m
+  [4;35;1mBananasUser Create (0.1ms)[0m   [0mINSERT INTO "bananas_users" ("bananas_attempts", "login", "ip_address") VALUES(9, NULL, NULL)[0m
+  [4;36;1mBananasReport Load (0.1ms)[0m   [0;1mSELECT * FROM "bananas_reports" WHERE ("bananas_reports"."ip_address" = '127.0.0.1') LIMIT 1[0m
+  [4;35;1mBananasUser Load (0.2ms)[0m   [0mSELECT * FROM "bananas_users" WHERE ("bananas_users"."id" = 2) [0m
+  [4;36;1mBananasUser Update (0.1ms)[0m   [0;1mUPDATE "bananas_users" SET "bananas_attempts" = 10 WHERE "id" = 2[0m
+  [4;35;1mBananasReport Load (0.2ms)[0m   [0mSELECT * FROM "bananas_reports" [0m
+  [4;36;1mBananasUser Load (0.1ms)[0m   [0;1mSELECT * FROM "bananas_users" [0m
+  [4;35;1mBananasUser Create (0.3ms)[0m   [0mINSERT INTO "bananas_users" ("bananas_attempts", "login", "ip_address") VALUES(11, NULL, NULL)[0m
+  [4;36;1mBananasReport Load (0.1ms)[0m   [0;1mSELECT * FROM "bananas_reports" WHERE ("bananas_reports"."ip_address" = '127.0.0.1') LIMIT 1[0m
+  [4;35;1mBananasUser Load (0.2ms)[0m   [0mSELECT * FROM "bananas_users" WHERE ("bananas_users"."id" = 1) [0m
+  [4;36;1mBananasUser Update (3.7ms)[0m   [0;1mUPDATE "bananas_users" SET "bananas_attempts" = 0 WHERE "id" = 1[0m
+  [4;35;1mBananasReport Create (0.2ms)[0m   [0mINSERT INTO "bananas_reports" ("created_at", "updated_at", "abuser_id", "counter", "ip_address") VALUES('2010-07-22 23:01:41', '2010-07-22 23:01:41', 1, 1, '127.0.0.1')[0m
+  [4;36;1mBananasReport Load (0.2ms)[0m   [0;1mSELECT * FROM "bananas_reports" [0m
+  [4;35;1mBananasUser Load (0.1ms)[0m   [0mSELECT * FROM "bananas_users" [0m
+  [4;36;1mBananasUser Create (0.3ms)[0m   [0;1mINSERT INTO "bananas_users" ("bananas_attempts", "login", "ip_address") VALUES(11, NULL, NULL)[0m
+  [4;35;1mBananasReport Load (0.1ms)[0m   [0mSELECT * FROM "bananas_reports" WHERE ("bananas_reports"."ip_address" = '127.0.0.1') LIMIT 1[0m
+  [4;36;1mBananasUser Load (0.2ms)[0m   [0;1mSELECT * FROM "bananas_users" WHERE ("bananas_users"."id" = 1) [0m
+  [4;35;1mBananasUser Update (0.1ms)[0m   [0mUPDATE "bananas_users" SET "bananas_attempts" = 0 WHERE "id" = 1[0m
+  [4;36;1mBananasReport Create (0.1ms)[0m   [0;1mINSERT INTO "bananas_reports" ("created_at", "updated_at", "abuser_id", "counter", "ip_address") VALUES('2010-07-22 23:01:41', '2010-07-22 23:01:41', 1, 1, '127.0.0.1')[0m
+  [4;35;1mBananasReport Load (0.3ms)[0m   [0mSELECT * FROM "bananas_reports" WHERE ("bananas_reports"."ip_address" = '127.0.0.1') LIMIT 1[0m
+  [4;36;1mBananasUser Load (0.4ms)[0m   [0;1mSELECT * FROM "bananas_users" WHERE ("bananas_users"."id" = 1) [0m
+  [4;35;1mBananasUser Update (0.1ms)[0m   [0mUPDATE "bananas_users" SET "bananas_attempts" = 1 WHERE "id" = 1[0m
+  [4;36;1mBananasReport Load (1.4ms)[0m   [0;1mSELECT * FROM "bananas_reports" [0m
+  [4;35;1mBananasUser Load (0.1ms)[0m   [0mSELECT * FROM "bananas_users" [0m
+  [4;36;1mBananasUser Create (0.3ms)[0m   [0;1mINSERT INTO "bananas_users" ("bananas_attempts", "login", "ip_address") VALUES(11, NULL, NULL)[0m
+  [4;35;1mBananasReport Load (0.2ms)[0m   [0mSELECT * FROM "bananas_reports" WHERE ("bananas_reports"."ip_address" = '127.0.0.1') LIMIT 1[0m
+  [4;36;1mBananasUser Load (0.2ms)[0m   [0;1mSELECT * FROM "bananas_users" WHERE ("bananas_users"."id" = 1) [0m
+  [4;35;1mBananasUser Update (0.1ms)[0m   [0mUPDATE "bananas_users" SET "bananas_attempts" = 0 WHERE "id" = 1[0m
+  [4;36;1mBananasReport Create (0.1ms)[0m   [0;1mINSERT INTO "bananas_reports" ("created_at", "updated_at", "abuser_id", "counter", "ip_address") VALUES('2010-07-22 23:01:41', '2010-07-22 23:01:41', 1, 1, '127.0.0.1')[0m
+  [4;35;1mBananasUser Load (0.2ms)[0m   [0mSELECT * FROM "bananas_users" WHERE ("bananas_users"."id" = 1) [0m
+  [4;36;1mBananasReport Load (0.2ms)[0m   [0;1mSELECT * FROM "bananas_reports" WHERE ("bananas_reports"."ip_address" = '127.0.0.1') LIMIT 1[0m
+  [4;35;1mBananasUser Load (0.1ms)[0m   [0mSELECT * FROM "bananas_users" WHERE ("bananas_users"."id" = 1) [0m
+  [4;36;1mBananasUser Update (0.1ms)[0m   [0;1mUPDATE "bananas_users" SET "bananas_attempts" = 1 WHERE "id" = 1[0m
+  [4;35;1mBananasUser Load (0.2ms)[0m   [0mSELECT * FROM "bananas_users" WHERE ("bananas_users"."id" = 1) [0m
+  [4;35;1mSQL (0.3ms)[0m   [0mselect sqlite_version(*)[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (2.5ms)[0m   [0mDROP TABLE "bananas_reports"[0m
+  [4;36;1mSQL (2.3ms)[0m   [0;1mCREATE TABLE "bananas_reports" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "ip_address" varchar(255), "abuser_id" integer, "counter" integer DEFAULT 0, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.4ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (1.3ms)[0m   [0;1mDROP TABLE "bananas_users"[0m
+  [4;35;1mSQL (1.2ms)[0m   [0mCREATE TABLE "bananas_users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "ip_address" varchar(255), "bananas_attempts" integer) [0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (9.3ms)[0m   [0mSELECT version FROM "schema_migrations"[0m
+  [4;36;1mBananasReport Load (0.2ms)[0m   [0;1mSELECT * FROM "bananas_reports" [0m
+  [4;35;1mSQL (0.3ms)[0m   [0mselect sqlite_version(*)[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (2.7ms)[0m   [0mDROP TABLE "bananas_reports"[0m
+  [4;36;1mSQL (3.2ms)[0m   [0;1mCREATE TABLE "bananas_reports" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "ip_address" varchar(255), "abuser_id" integer, "counter" integer DEFAULT 0, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.4ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (3.4ms)[0m   [0;1mDROP TABLE "bananas_users"[0m
+  [4;35;1mSQL (1.4ms)[0m   [0mCREATE TABLE "bananas_users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "ip_address" varchar(255), "bananas_attempts" integer) [0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (1.3ms)[0m   [0mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mselect sqlite_version(*)[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (2.7ms)[0m   [0mDROP TABLE "bananas_reports"[0m
+  [4;36;1mSQL (3.2ms)[0m   [0;1mCREATE TABLE "bananas_reports" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "ip_address" varchar(255), "abuser_id" integer, "counter" integer DEFAULT 0, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.6ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (1.6ms)[0m   [0;1mDROP TABLE "bananas_users"[0m
+  [4;35;1mSQL (6.8ms)[0m   [0mCREATE TABLE "bananas_users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "ip_address" varchar(255), "bananas_attempts" integer) [0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mselect sqlite_version(*)[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (2.6ms)[0m   [0mDROP TABLE "bananas_reports"[0m
+  [4;36;1mSQL (1.7ms)[0m   [0;1mCREATE TABLE "bananas_reports" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "ip_address" varchar(255), "abuser_id" integer, "counter" integer DEFAULT 0, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (1.2ms)[0m   [0;1mDROP TABLE "bananas_users"[0m
+  [4;35;1mSQL (10.2ms)[0m   [0mCREATE TABLE "bananas_users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "ip_address" varchar(255), "bananas_attempts" integer) [0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSELECT version FROM "schema_migrations"[0m
+  [4;36;1mBananasReport Create (0.4ms)[0m   [0;1mINSERT INTO "bananas_reports" ("created_at", "updated_at", "abuser_id", "counter", "ip_address") VALUES('2010-07-22 23:07:38', '2010-07-22 23:07:38', NULL, 0, '127.0.0.1')[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mselect sqlite_version(*)[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (2.6ms)[0m   [0mDROP TABLE "bananas_reports"[0m
+  [4;36;1mSQL (1.4ms)[0m   [0;1mCREATE TABLE "bananas_reports" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "ip_address" varchar(255), "abuser_id" integer, "counter" integer DEFAULT 0, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (2.2ms)[0m   [0;1mDROP TABLE "bananas_users"[0m
+  [4;35;1mSQL (1.6ms)[0m   [0mCREATE TABLE "bananas_users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "ip_address" varchar(255), "bananas_attempts" integer) [0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mSELECT version FROM "schema_migrations"[0m
+  [4;36;1mBananasReport Create (0.4ms)[0m   [0;1mINSERT INTO "bananas_reports" ("created_at", "updated_at", "abuser_id", "counter", "ip_address") VALUES('2010-07-22 23:07:50', '2010-07-22 23:07:50', NULL, 0, '127.0.0.1')[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mselect sqlite_version(*)[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (2.9ms)[0m   [0mDROP TABLE "bananas_reports"[0m
+  [4;36;1mSQL (1.9ms)[0m   [0;1mCREATE TABLE "bananas_reports" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "ip_address" varchar(255), "abuser_id" integer, "counter" integer DEFAULT 0, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (12.3ms)[0m   [0;1mDROP TABLE "bananas_users"[0m
+  [4;35;1mSQL (1.6ms)[0m   [0mCREATE TABLE "bananas_users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "ip_address" varchar(255), "bananas_attempts" integer) [0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSELECT version FROM "schema_migrations"[0m
+  [4;36;1mBananasReport Create (0.5ms)[0m   [0;1mINSERT INTO "bananas_reports" ("created_at", "updated_at", "abuser_id", "counter", "ip_address") VALUES('2010-07-22 23:08:29', '2010-07-22 23:08:29', NULL, 0, '127.0.0.1')[0m
+  [4;35;1mBananasReport Load (0.3ms)[0m   [0mSELECT * FROM "bananas_reports" WHERE ("bananas_reports"."id" = 1) [0m
+  [4;36;1mBananasReport Destroy (0.1ms)[0m   [0;1mDELETE FROM "bananas_reports" WHERE "id" = 1[0m

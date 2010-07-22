@@ -19,6 +19,14 @@ class BananasReportsController < ApplicationController
     @reports = self.class.report_class.find(:all)
   end
 
+  def destroy
+    if report = self.class.report_class.find(params[:id])
+      report.destroy
+      flash[:success] = "Report successfully deleted."
+      redirect_to :action => "index"
+    end
+  end
+
   private
 
     def authorized?
