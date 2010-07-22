@@ -1,6 +1,6 @@
 class BananasReport < ActiveRecord::Base
 
-  @@report_conditions = [:check_number_of_bananas_attempts]
+  @@create_conditions = [:check_number_of_bananas_attempts]
 
   class<<self
     
@@ -14,7 +14,7 @@ class BananasReport < ActiveRecord::Base
         report = self.new(attrs)
       end
       report.abuser_id = attrs[:abuser_id] if attrs[:abuser_id]
-      report.check_conditions
+      report.check_create_conditions
       report.counter += 1
       if report.errors.empty? && report.save
         BananasMailer.deliver_new_report(self, ADMIN_EMAILS)
@@ -24,14 +24,15 @@ class BananasReport < ActiveRecord::Base
 
     private
 
-      def report_condition(c)
-        @@report_conditions << c
+      def create_condition(c)
+        @@create_conditions << c if c.kind_of(Symbol)
+        @@create_conditions += c if c.kind_of(Array)
       end
 
   end
 
-  def check_conditions
-    @@report_conditions.each { |c| break if !self.send(c) }
+  def check_create_conditions
+    @@create_conditions.all? { |c| self.send(c) }
   end
 
 
