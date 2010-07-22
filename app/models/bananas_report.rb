@@ -9,6 +9,10 @@ class BananasReport < ActiveRecord::Base
       belongs_to @abuser, :foreign_key => "abuser_id"
     end
 
+    def admin_emails(emails)
+      @admin_emails = emails
+    end
+
     def cast(attrs)
       @create_conditions ||= [:check_number_of_bananas_attempts]
       if !(report = self.find_by_ip_address(attrs[:ip_address]))
@@ -18,7 +22,7 @@ class BananasReport < ActiveRecord::Base
       report.check_create_conditions
       report.counter += 1
       if report.errors.empty? && report.save
-        BananasMailer.deliver_new_report(self, ADMIN_EMAILS)
+        BananasMailer.deliver_new_report(self, @admin_emails)
       end
       return report
     end
