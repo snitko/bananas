@@ -25,8 +25,8 @@ class BananasReport < ActiveRecord::Base
     private
 
       def create_condition(c)
-        @@create_conditions << c if c.kind_of(Symbol)
-        @@create_conditions += c if c.kind_of(Array)
+        @@create_conditions << c if c.kind_of?(Symbol)
+        @@create_conditions += c if c.kind_of?(Array)
       end
 
   end
@@ -49,11 +49,6 @@ class BananasReport < ActiveRecord::Base
         abuser.update_attributes(:bananas_attempts => 0)
         return true
       end
-    end
-
-
-    def increment_counter
-      self.counter += 1
     end
 
 end
