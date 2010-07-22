@@ -1,15 +1,16 @@
 class BananasReport < ActiveRecord::Base
 
-  @@create_conditions = [:check_number_of_bananas_attempts]
-
   class<<self
+
+    attr_accessor :abuser, :create_conditions
     
     def belongs_to_abuser(model)
-      @@abuser = model
-      belongs_to @@abuser, :foreign_key => "abuser_id"
+      @abuser = model
+      belongs_to @abuser, :foreign_key => "abuser_id"
     end
 
     def cast(attrs)
+      @create_conditions ||= [:check_number_of_bananas_attempts]
       if !(report = self.find_by_ip_address(attrs[:ip_address]))
         report = self.new(attrs)
       end
@@ -25,21 +26,22 @@ class BananasReport < ActiveRecord::Base
     private
 
       def create_condition(c)
-        @@create_conditions << c if c.kind_of?(Symbol)
-        @@create_conditions += c if c.kind_of?(Array)
+        @create_conditions << c if c.kind_of?(Symbol)
+        @create_conditions += c if c.kind_of?(Array)
       end
 
   end
 
   def check_create_conditions
-    @@create_conditions.all? { |c| self.send(c) }
+    self.class.create_conditions.all? { |c| self.send(c) }
   end
 
 
   private
     
     def check_number_of_bananas_attempts
-      abuser = self.send(@@abuser)
+      return true if self.class.abuser.nil?
+      abuser = self.send(self.class.abuser)
       if abuser && abuser.bananas_attempts < 10
         abuser.bananas_attempts += 1
         abuser.save
