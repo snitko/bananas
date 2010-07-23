@@ -34,6 +34,14 @@ class BananasReport < ActiveRecord::Base
       return report
     end
 
+    def snake_name(options = {})
+      name = self.to_s
+      name = name.pluralize if options[:plural]
+      return name.downcase if self =~ /^[A-Z]+$/
+      name.gsub(/([A-Z]+)(?=[A-Z][a-z]?)|\B[A-Z]/, '_\&') =~ /_*(.*)/
+        return $+.downcase
+    end
+
     private
 
       def create_condition(c)
@@ -43,25 +51,18 @@ class BananasReport < ActiveRecord::Base
 
   end
 
+  def abuser
+    self.send(self.class.abuser)
+  end
+
   def check_create_conditions
     self.class.create_conditions.all? { |c| self.send(c) }
   end
 
-
-  def class_snake_name(options = {})
-    name = self.class.to_s
-    name = name.pluralize if options[:plural]
-    return name.downcase if self =~ /^[A-Z]+$/
-    name.gsub(/([A-Z]+)(?=[A-Z][a-z]?)|\B[A-Z]/, '_\&') =~ /_*(.*)/
-      return $+.downcase
-  end
-
-
   private
     
     def check_number_of_bananas_attempts
-      return true if self.class.abuser.nil?
-      abuser = self.send(self.class.abuser)
+      return true if abuser.nil?
       if abuser && abuser.bananas_attempts < self.class.allowed_attempts
         abuser.bananas_attempts += 1
         abuser.save

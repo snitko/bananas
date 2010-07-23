@@ -22,7 +22,7 @@ describe SpamReportsController do
     end
     it "renders new session form if the user is not authorized to access bananas manager" do
       get 'index'
-      response.should render_template("new_session")
+      response.should render_template("bananas_reports/new_session")
     end
 
   end

@@ -13,10 +13,17 @@ class BananasReportsController < ApplicationController
 
   end
 
-  before_filter :authorize
+  before_filter :authorize, :set_environment
+  layout nil
+
+  # This method is called to prevent
+  # "A copy of ApplicationController has been removed from the module tree but is still active!"
+  # exception.
+  unloadable
 
   def index
-    @reports = self.class.report_class.find(:all)
+    @reports = self.class.report_class.paginate(:per_page => 10, :page => params[:page], :order => "created_at DESC")
+    render_template "index"
   end
 
   def show
@@ -52,7 +59,21 @@ class BananasReportsController < ApplicationController
     end
 
     def authorize
-      render :template => "new_session" unless authorized?
+      render :template => "bananas_reports/new_session" unless authorized?
+    end
+
+    # Renders bananas_reports default templates
+    # if application's custom templates are not found.
+    def render_template(template_name)
+      begin
+        render "#{template_name}"
+      rescue(ActionView::MissingTemplate)
+        render :template => "bananas_reports/#{template_name}"
+      end
+    end
+
+    def set_environment
+      @report_class = self.class.report_class.snake_name
     end
 
 end

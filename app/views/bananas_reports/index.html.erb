@@ -1,0 +1,28 @@
+<h1>Bananas manager</h1>
+<% unless @reports.blank? %>
+  <p><%= flash[:success] %></p>
+  <table border="1">
+
+    <tr>
+      <th>ip address</th>
+      <th>abuser id</th>
+      <th>number of reports</th>
+      <th>created_at</th>
+      <th></th>
+    </tr>
+
+  <% @reports.each do |r| %>
+
+    <tr>
+      <td><%= r.ip_address %></td>
+      <td><%= link_to r.abuser.id, r.abuser if r.abuser %></td>
+      <td><%= r.counter %></td>
+      <td><%= r.created_at %></td>
+      <td><%= link_to "delete", self.send("#{@report_class}_path".to_sym, r), :confirm => "Are you sure?", :method => "delete" %></td>
+    </tr>
+
+  <% end %>
+  </table>
+<% else %>
+  No reports yet
+<% end %>

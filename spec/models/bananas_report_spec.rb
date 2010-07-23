@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 class BananasUser < ActiveRecord::Base; end
 BananasReport.belongs_to_abuser :bananas_user
-BananasReport::ADMIN_EMAILS = ["admin@bananas"]
+BananasReport.admin_emails      ["admin@bananas"]
 
 describe BananasReport do
 
