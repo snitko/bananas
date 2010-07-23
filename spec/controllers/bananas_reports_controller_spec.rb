@@ -12,11 +12,6 @@ end
 
 describe SpamReportsController do
 
-  before(:all) do
-    ActionController::Routing::Routes.draw do |map|
-      map.resources :bananas_reports
-    end
-  end
 
   describe "index action" do
 
@@ -30,6 +25,18 @@ describe SpamReportsController do
       response.should render_403
     end
 
+  end
+
+  describe "show action" do
+    it "finds report by ip_address and renders report page" do
+      BananasReport.create(:ip_address => "127.0.0.1")
+      get "show", :id => "127.0.0.1", :access => { :login => "login", :password => "password" }
+      response.should render_template("show")
+    end
+    it "renders 404 page of the report was not found by ip_address" do
+      get "show", :id => "0.0.0.0", :access => { :login => "login", :password => "password" }
+      response.should render_404
+    end
   end
 
   describe "delete action" do

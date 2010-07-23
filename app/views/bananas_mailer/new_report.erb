@@ -1,0 +1,8 @@
+Hi, a new bananas report has hust been filed.
+Someone has been trying to access app resources for more than<%= @report.class.allowed_attempts %>.
+
+Someone's ip address is: <%= @report.ip_address %>
+
+This ip has been blocked.
+To unblock it, visit this page: <%= self.send("#{@report.class_snake_name(:plural => true)}_url") + "/#{@report.ip_address}" %>
+and delete the report.

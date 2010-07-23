@@ -19,6 +19,11 @@ class BananasReportsController < ApplicationController
     @reports = self.class.report_class.find(:all)
   end
 
+  def show
+    @report = self.class.report_class.find_by_ip_address(params[:id])
+    render :file => "#{RAILS_ROOT}/public/404.html" unless @report
+  end
+
   def destroy
     if report = self.class.report_class.find(params[:id])
       report.destroy
