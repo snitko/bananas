@@ -35,13 +35,24 @@ class BananasReportsController < ApplicationController
   private
 
     def authorized?
-      params[:access]                                                 &&
+      authorized_by_session? or authorized_by_password?
+    end
+
+    def authorized_by_session?
+      Digest::MD5.hexdigest(self.class.access_data[:login] + self.class.access_data[:password]) == session[:bananas_manager_access]
+    end
+
+    def authorized_by_password?
+      if params[:access]                                              &&
       params[:access][:login]    == self.class.access_data[:login]    &&
       params[:access][:password] == self.class.access_data[:password]
+        session[:bananas_manager_access] = Digest::MD5.hexdigest(params[:access][:login] + params[:access][:password])
+        return true
+      end
     end
 
     def authorize
-      render_403 unless authorized?
+      render :template => "new_session" unless authorized?
     end
 
 end

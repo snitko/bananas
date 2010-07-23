@@ -20,21 +20,26 @@ describe SpamReportsController do
       response.should render_template("index")
       assigns(:reports).should_not be_nil
     end
-    it "renders 403 if user is not allowed to access the manager" do
+    it "renders new session form if the user is not authorized to access bananas manager" do
       get 'index'
-      response.should render_403
+      response.should render_template("new_session")
     end
 
   end
 
   describe "show action" do
+
+    before(:each) do
+      session[:bananas_manager_access] = Digest::MD5.hexdigest("loginpassword")
+    end
+
     it "finds report by ip_address and renders report page" do
       BananasReport.create(:ip_address => "127.0.0.1")
-      get "show", :id => "127.0.0.1", :access => { :login => "login", :password => "password" }
+      get "show", :id => "127.0.0.1"
       response.should render_template("show")
     end
-    it "renders 404 page of the report was not found by ip_address" do
-      get "show", :id => "0.0.0.0", :access => { :login => "login", :password => "password" }
+    it "renders 404 page if the report with this ip_address was not found" do
+      get "show", :id => "0.0.0.0"
       response.should render_404
     end
   end
