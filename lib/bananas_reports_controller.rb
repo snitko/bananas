@@ -39,6 +39,10 @@ module Bananas
       render_template "index"
     end
 
+    def create
+      redirect_to :action => "index"
+    end
+
     def show
       @report = self.class.get_report_class.find_by_ip_address(params[:id])
       render :file => "#{RAILS_ROOT}/public/404.html" unless @report
