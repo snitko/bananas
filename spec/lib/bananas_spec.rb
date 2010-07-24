@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 class ApplicationController < ActionController::Base
   include Bananas
-  bananas "MySpamReport"
+  bananas :my_spam_report
 end
 
 class SomeController < ApplicationController
