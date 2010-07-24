@@ -11,6 +11,7 @@ end
 class BananasUser < ActiveRecord::Base; end
 class SpamReport < ActiveRecord::Base
   include Bananas::Report
+  attempts_storage  :active_record
   belongs_to_abuser :bananas_user
   admin_emails      ["admin@bananas"]
 end

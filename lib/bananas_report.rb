@@ -23,6 +23,10 @@ module Bananas
           @allowed_attempts ||= 10
         end
 
+        def attempts_storage(type)
+          include AttemptsStorage::const_get(type.to_s.camelcase)
+        end
+
         def cast(attrs)
           @create_conditions ||= [:check_number_of_bananas_attempts]
           if !(report = self.find_by_ip_address(attrs[:ip_address]))
@@ -64,20 +68,32 @@ module Bananas
       self.class.create_conditions.all? { |c| self.send(c) }
     end
 
-    private
-      
-      def check_number_of_bananas_attempts
-        return true if abuser.nil?
-        if abuser && abuser.bananas_attempts < self.class.allowed_attempts
-          abuser.bananas_attempts += 1
-          abuser.save
-          errors.add(:base, "Not enough attempts to consider this a spam")
-          return false
-        else
-          abuser.update_attributes(:bananas_attempts => 0)
-          return true
+    module AttemptsStorage
+
+      module ActiveRecord
+        private
+        def check_number_of_bananas_attempts
+          return true if abuser.nil?
+          if abuser && abuser.bananas_attempts < self.class.allowed_attempts
+            abuser.bananas_attempts += 1
+            abuser.save
+            errors.add(:base, "Not enough attempts to consider this a spam")
+            return false
+          else
+            abuser.update_attributes(:bananas_attempts => 0)
+            return true
+          end
         end
       end
+
+      module Cache
+        private
+        def check_number_of_bananas_attempts
+          throw "Nothing here yet"
+        end
+      end
+
+    end
 
   end
 end
