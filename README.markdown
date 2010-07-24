@@ -2,30 +2,35 @@ Bananas - a simple ip addresses and spam manager for Rails
 ==========================================================
 
 _Bananas_ does three things:
-* Watches requests from a particular ip address and files a report if requests happen too often
+  *  Watches requests from a particular ip address and files a report if requests happen too often
   (+ emails you, if you want that).
-* Blocks access from ip addresses that have been filed in reports.
-* Provides an interface to manage those reports.
+  *  Blocks access from ip addresses that have been filed in reports.
+  *  Provides an interface to manage those reports.
+
+(Currently works on Rails 2.3, will support Rails 3 next week)
 
 Installation
 ============
 1. Download the plugin
-    git sumbodule add git://github.com/snitko/bananas.git vendor/plugins/bananas
+
+        git submodule add git://github.com/snitko/bananas.git vendor/plugins/bananas
 
 2. Generate stuff
-    script/generate bananas spam_report user
 
-The first argument "spam_report" is the name of the model you're going to use as a base for reports.
-The second argument - a name for the class that is supposed to be a potential abuser (usually "user") -
-is optional, although necessary if you're using ActiveRecord as a storage for attempts (see "Customizing" section).
-This command will do the following: generate `SpamReport` model and `SpamReportsController`,
-add resource route for `spam_reports` and create a migration.
+        script/generate bananas spam_report user
+
+  The first argument "spam_report" is the name of the model you're going to use as a base for reports.
+  The second argument - a name for the class that is supposed to be a potential abuser (usually "user") -
+  is optional, although necessary if you're using ActiveRecord as a storage for attempts (see "Customizing" section).
+  This command will do the following: generate `SpamReport` model and `SpamReportsController`,
+  add resource route for `spam_reports` and create a migration.
 
 3. Run `rake db:migrate`
 
 4. Add the following lines to the `ApplicationController`:
-    include Bananas
-    bananas :spam_report
+
+        include Bananas
+        bananas :spam_report
 
 Usage
 =====
@@ -54,7 +59,7 @@ unconditionally!_ Here's an example of how it can be used:
       end
     end
 
-`#check_spam_report' is a method that checks against existing SpamReports and blocks
+`#check_spam_report` is a method that checks against existing SpamReports and blocks
 access (by rendering 403 page) if the report for the current ip address exists. Here's a usage example:
 
     class PostsController
@@ -87,7 +92,7 @@ Customizing
 If you take a look at the options in those two generated classes you will find them
 pretty self-descriptve. Here I'll concentrate on the more advanced issues.
 
-Reports Create Coniditions
+Reports Create Conditions
 --------------------------
 
 When a report is created it must first satisfy a number of conditions.
@@ -107,7 +112,7 @@ Others you can create yourself and add to the conditions list like that:
         end
 
         def check_user_rating
-          errors.add(:base, "This user can't be a spammer!") if abuser.location == "NYC"
+          errors.add(:base, "This user can't be a spammer!") if abuser.rating > 100
         end
 
     end
@@ -116,7 +121,7 @@ Others you can create yourself and add to the conditions list like that:
 Report Attempts storage
 -----------------------
 
-a `#check_number_of_attempts` method checks the number of report casting attempts
+The `#check_number_of_attempts` method checks the number of report casting attempts
 over the set period of time. If the number of attempts over this time is less then
 a certain amount of "allowed" time, then it increments the number of attempts. If it's more,
 then it creates a report and flashes attempts stack.
@@ -129,7 +134,7 @@ The latter is understandably faster, as you avoid 1 extra query to the database
 (it is needed to update the `bananas_report` field). However, you would also need to configure your
 cache storage (documentation on this is coming).
 
-Alternatively, you can redefine `check_number_of_attempts` method and store things
+Alternatively, you can redefine `#check_number_of_attempts` method and store things
 elsewhere.
 
 
