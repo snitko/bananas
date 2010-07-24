@@ -10,6 +10,7 @@ class BananasGenerator < Rails::Generator::Base
           { :assigns => { :args => bananas_options }, :migration_file_name => "create_#{bananas_options[:report_model_name].pluralize}.rb" }
         m.template 'model.rb.erb',      "app/models/#{bananas_options[:report_model_name]}.rb", { :assigns => { :args => bananas_options } }
         m.template 'controller.rb.erb', "app/controllers/#{bananas_options[:report_model_name].pluralize}_controller.rb", { :assigns => { :args => bananas_options } }
+        m.route_resources "#{bananas_options[:report_model_name].pluralize}"
       end
     end
 
