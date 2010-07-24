@@ -78,6 +78,11 @@ module Bananas
     module AttemptsStorage
 
       module ActiveRecord
+
+        def self.included(base)
+          const_get(base.abuser.to_s.camelcase).class_eval { serialize :bananas_attempts }
+        end
+
         private
         def check_number_of_attempts
           return true if abuser.nil?

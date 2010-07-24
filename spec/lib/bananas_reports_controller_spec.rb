@@ -3,13 +3,13 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 class ApplicationController < ActionController::Base
 end
 
-class SpamReportsController < ApplicationController
+class MySpamReportsController < ApplicationController
   include Bananas::ReportsController
   access           :login => "login", :password => "password"
-  set_report_class "SpamReport"
+  set_report_class "MySpamReport"
 end
 
-describe SpamReportsController, :type => :controller do
+describe MySpamReportsController, :type => :controller do
 
   describe "index action" do
 
@@ -32,7 +32,7 @@ describe SpamReportsController, :type => :controller do
     end
 
     it "finds report by ip_address and renders report page" do
-      SpamReport.create(:ip_address => "127.0.0.1")
+      MySpamReport.create(:ip_address => "127.0.0.1")
       get "show", :id => "127.0.0.1"
       response.should render_template("show")
     end
@@ -45,7 +45,7 @@ describe SpamReportsController, :type => :controller do
   describe "delete action" do
 
     it "deletes the report if the user is authorized" do
-      report = SpamReport.create(:ip_address => "127.0.0.1")
+      report = MySpamReport.create(:ip_address => "127.0.0.1")
       delete "destroy", :id => report.id, :access => { :login => "login", :password => "password" }
       flash[:success].should_not be_nil
       response.should redirect_to(:action => "index")

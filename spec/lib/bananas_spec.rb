@@ -2,18 +2,18 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 class ApplicationController < ActionController::Base
   include Bananas
-  bananas "SpamReport"
+  bananas "MySpamReport"
 end
 
 class SomeController < ApplicationController
   def action_that_checks_reports
-    check_spam_report
+    check_my_spam_report
   end
   def action_that_casts_reports
     bananas_attempts = []
     11.times { bananas_attempts << 30.seconds.ago }
     u = BananasUser.create(:login => "user", :bananas_attempts => bananas_attempts)
-    cast_spam_report(u.id)
+    cast_my_spam_report(u.id)
   end
 end
 
@@ -26,11 +26,11 @@ describe SomeController, :type => :controller do
   describe "bananas report checks" do
     
     after(:each) do
-      SpamReport.find(:all).each { |r| r.destroy }
+      MySpamReport.find(:all).each { |r| r.destroy }
     end
     
     it "renders 403 page if the report exists" do
-      SpamReport.create(:ip_address => "127.0.0.1")
+      MySpamReport.create(:ip_address => "127.0.0.1")
       get :action_that_checks_reports
       response.should render_403
     end
@@ -44,7 +44,7 @@ describe SomeController, :type => :controller do
 
   it "casts a new banana report" do
     get :action_that_casts_reports
-    report = SpamReport.find_by_ip_address("127.0.0.1")
+    report = MySpamReport.find_by_ip_address("127.0.0.1")
     report.should_not be_nil
     report.destroy #cleaning up
   end
