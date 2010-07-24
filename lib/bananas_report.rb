@@ -5,8 +5,12 @@ module Bananas
 
       class<<c
 
-        attr_reader :abuser, :create_conditions
+        attr_reader :abuser
         
+        def create_conditions
+          @create_conditions ||= [:check_number_of_attempts]
+        end
+
         def belongs_to_abuser(model)
           @abuser = model
           belongs_to @abuser, :foreign_key => "abuser_id"
@@ -35,7 +39,6 @@ module Bananas
         end
 
         def cast(attrs)
-          @create_conditions ||= [:check_number_of_attempts]
           if !(report = self.find_by_ip_address(attrs[:ip_address]))
             report = self.new(attrs)
           end
@@ -43,7 +46,7 @@ module Bananas
           report.check_create_conditions
           report.counter += 1
           if report.errors.empty? && report.save
-            BananasMailer.deliver_new_report(report, @admin_emails)
+            BananasMailer.deliver_new_report(report, @admin_emails) unless @admin_emails.blank?
           end
           return report
         end
@@ -59,6 +62,7 @@ module Bananas
         private
 
           def create_condition(c)
+            create_conditions
             @create_conditions << c if c.kind_of?(Symbol)
             @create_conditions += c if c.kind_of?(Array)
           end
