@@ -31,7 +31,7 @@ module Bananas
 
 
     def index
-      @reports = self.class.report_class.paginate(:per_page => 10, :page => params[:page], :order => "created_at DESC")
+      @reports = self.class.report_class.find(:all, :order => "created_at DESC")
       render_template "index"
     end
 

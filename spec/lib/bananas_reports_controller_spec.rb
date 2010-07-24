@@ -13,7 +13,7 @@ describe SpamReportsController, :type => :controller do
 
   describe "index action" do
 
-    it "shows paginated reports if the user is authorized" do
+    it "shows reports if the user is authorized" do
       get 'index', :access => { :login => "login", :password => "password" }
       response.should render_template("index")
       assigns(:reports).should_not be_nil
