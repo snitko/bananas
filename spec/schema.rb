@@ -8,9 +8,9 @@ ActiveRecord::Schema.define(:version => 0) do
   end
 
   create_table :bananas_users, :force => true do |t|
-    t.string  :login
-    t.string  :ip_address
-    t.integer :bananas_attempts
+    t.string    :login
+    t.string    :ip_address
+    t.text      :bananas_attempts
   end
 
 end

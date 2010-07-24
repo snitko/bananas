@@ -5,7 +5,7 @@ module Bananas
 
       class<<c
 
-        attr_accessor :abuser, :create_conditions
+        attr_reader :abuser, :create_conditions
         
         def belongs_to_abuser(model)
           @abuser = model
@@ -23,12 +23,19 @@ module Bananas
           @allowed_attempts ||= 10
         end
 
+        def set_attempts_expire_in(time)
+          @attempts_expire_in = time
+        end
+        def attempts_expire_in
+          @attempts_expire_in ||= 10.minutes
+        end
+
         def attempts_storage(type)
           include AttemptsStorage::const_get(type.to_s.camelcase)
         end
 
         def cast(attrs)
-          @create_conditions ||= [:check_number_of_bananas_attempts]
+          @create_conditions ||= [:check_number_of_attempts]
           if !(report = self.find_by_ip_address(attrs[:ip_address]))
             report = self.new(attrs)
           end
@@ -72,23 +79,22 @@ module Bananas
 
       module ActiveRecord
         private
-        def check_number_of_bananas_attempts
+        def check_number_of_attempts
           return true if abuser.nil?
-          if abuser && abuser.bananas_attempts < self.class.allowed_attempts
-            abuser.bananas_attempts += 1
-            abuser.save
-            errors.add(:base, "Not enough attempts to consider this a spam")
-            return false
+          fresh_attempts = abuser.bananas_attempts.delete_if { |a| a < self.class.attempts_expire_in.ago }
+          fresh_attempts << Time.now
+          if fresh_attempts.size > self.class.allowed_attempts
+            abuser.update_attributes(:bananas_attempts => [])
           else
-            abuser.update_attributes(:bananas_attempts => 0)
-            return true
+            abuser.update_attributes(:bananas_attempts => fresh_attempts)
+            errors.add("Not enough bananas attempts to file a report")
           end
         end
       end
 
       module Cache
         private
-        def check_number_of_bananas_attempts
+        def check_number_of_attempts
           throw "Nothing here yet"
         end
       end

@@ -8,7 +8,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :spam_reports
 end
 
-class BananasUser < ActiveRecord::Base; end
+class BananasUser < ActiveRecord::Base; serialize :bananas_attempts; end
 class SpamReport < ActiveRecord::Base
   include Bananas::Report
   attempts_storage  :active_record

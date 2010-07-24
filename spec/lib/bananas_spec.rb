@@ -10,7 +10,9 @@ class SomeController < ApplicationController
     check_spam_report
   end
   def action_that_casts_reports
-    u = BananasUser.create(:login => "user", :bananas_attempts => 10)
+    bananas_attempts = []
+    11.times { bananas_attempts << 30.seconds.ago }
+    u = BananasUser.create(:login => "user", :bananas_attempts => bananas_attempts)
     cast_spam_report(u.id)
   end
 end
