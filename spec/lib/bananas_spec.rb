@@ -1,26 +1,17 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-require "bananas_report"
-require "bananas_reports_controller"
-
-BananasReport.belongs_to_abuser :bananas_user
-BananasReport.admin_emails      ["admin@bananas"]
-
-class BananasUser < ActiveRecord::Base
-end
-
 class ApplicationController < ActionController::Base
   include Bananas
-  bananas "BananasReport"
+  bananas "SpamReport"
 end
 
 class SomeController < ApplicationController
   def action_that_checks_reports
-    check_bananas_report
+    check_spam_report
   end
   def action_that_casts_reports
     u = BananasUser.create(:login => "user", :bananas_attempts => 10)
-    cast_bananas_report(u.id)
+    cast_spam_report(u.id)
   end
 end
 
@@ -33,11 +24,11 @@ describe SomeController, :type => :controller do
   describe "bananas report checks" do
     
     after(:each) do
-      BananasReport.find(:all).each { |r| r.destroy }
+      SpamReport.find(:all).each { |r| r.destroy }
     end
     
     it "renders 403 page if the report exists" do
-      BananasReport.create(:ip_address => "127.0.0.1")
+      SpamReport.create(:ip_address => "127.0.0.1")
       get :action_that_checks_reports
       response.should render_403
     end
@@ -51,7 +42,7 @@ describe SomeController, :type => :controller do
 
   it "casts a new banana report" do
     get :action_that_casts_reports
-    report = BananasReport.find_by_ip_address("127.0.0.1")
+    report = SpamReport.find_by_ip_address("127.0.0.1")
     report.should_not be_nil
     report.destroy #cleaning up
   end

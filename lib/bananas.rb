@@ -1,3 +1,6 @@
+require 'bananas_report'
+require 'bananas_reports_controller'
+
 module Bananas
 
   def self.included(c)
