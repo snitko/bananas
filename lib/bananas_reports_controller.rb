@@ -4,14 +4,18 @@ module Bananas
     def self.included(c)
       class <<c
 
-        attr_reader :access_data, :report_class
+        attr_reader :access_data
 
         def access(attrs)
           @access_data = attrs
         end
 
-        def set_report_class(class_name)
-          @report_class = const_get(class_name)    
+        def report_class(class_name)
+          @report_class = const_get(class_name.to_s.camelcase) 
+        end
+        def get_report_class
+          throw "Please set report class name" unless @report_class
+          @report_class
         end
 
       end
@@ -31,17 +35,17 @@ module Bananas
 
 
     def index
-      @reports = self.class.report_class.find(:all, :order => "created_at DESC")
+      @reports = self.class.get_report_class.find(:all, :order => "created_at DESC")
       render_template "index"
     end
 
     def show
-      @report = self.class.report_class.find_by_ip_address(params[:id])
+      @report = self.class.get_report_class.find_by_ip_address(params[:id])
       render :file => "#{RAILS_ROOT}/public/404.html" unless @report
     end
 
     def destroy
-      if report = self.class.report_class.find(params[:id])
+      if report = self.class.get_report_class.find(params[:id])
         report.destroy
         flash[:success] = "Report successfully deleted."
         redirect_to :action => "index"
@@ -82,7 +86,7 @@ module Bananas
       end
 
       def set_environment
-        @report_class = self.class.report_class.snake_name
+        @report_class = self.class.get_report_class.snake_name
       end
 
   end

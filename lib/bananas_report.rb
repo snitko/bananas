@@ -16,17 +16,17 @@ module Bananas
           @admin_emails = emails
         end
 
-        def set_allowed_attempts(number)
+        def allowed_attempts(number)
           @allowed_attempts = number
         end
-        def allowed_attempts
+        def get_allowed_attempts
           @allowed_attempts ||= 10
         end
 
-        def set_attempts_expire_in(time)
+        def attempts_expire_in(time)
           @attempts_expire_in = time
         end
-        def attempts_expire_in
+        def get_attempts_expire_in
           @attempts_expire_in ||= 10.minutes
         end
 
@@ -86,9 +86,9 @@ module Bananas
         private
         def check_number_of_attempts
           return true if abuser.nil?
-          fresh_attempts = abuser.bananas_attempts.delete_if { |a| a < self.class.attempts_expire_in.ago }
+          fresh_attempts = abuser.bananas_attempts.delete_if { |a| a < self.class.get_attempts_expire_in.ago }
           fresh_attempts << Time.now
-          if fresh_attempts.size > self.class.allowed_attempts
+          if fresh_attempts.size > self.class.get_allowed_attempts
             abuser.update_attributes(:bananas_attempts => [])
           else
             abuser.update_attributes(:bananas_attempts => fresh_attempts)

@@ -1,0 +1,12 @@
+class <%= args[:report_model_name].camelcase%> < ActiveRecord::Base
+  include Bananas::Report
+  <%- if args[:abuser_model_name] -%>
+  belongs_to_abuser   :<%= args[:abuser_model_name]%>
+  attempts_storage    :active_record
+  <%- else -%>
+  attempts_storage    :cache
+  <%- end -%>
+  attempts_expire_in  1.minute
+  allowed_attempts    10
+  admin_emails        []
+end

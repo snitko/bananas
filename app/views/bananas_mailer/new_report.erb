@@ -1,5 +1,5 @@
 Hi, a new bananas report has hust been filed.
-Someone has been trying to access app resources for more than<%= @report.class.allowed_attempts %>.
+Someone has been trying to access app resources for more than<%= @report.class.get_allowed_attempts %>.
 
 Someone's ip address is: <%= @report.ip_address %>
 

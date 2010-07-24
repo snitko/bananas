@@ -6,7 +6,7 @@ end
 class MySpamReportsController < ApplicationController
   include Bananas::ReportsController
   access           :login => "login", :password => "password"
-  set_report_class "MySpamReport"
+  report_class :my_spam_report
 end
 
 describe MySpamReportsController, :type => :controller do

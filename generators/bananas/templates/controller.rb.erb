@@ -1,0 +1,5 @@
+class <%= args[:report_model_name].pluralize.camelcase %>Controller < ApplicationController
+  include Bananas::ReportsController
+  access           :login => "login", :password => "password"
+  report_class :<%= args[:report_model_name] %>
+end
