@@ -86,7 +86,11 @@ module Bananas
         private
         def check_number_of_attempts
           return true if abuser.nil?
-          fresh_attempts = abuser.bananas_attempts.delete_if { |a| a < self.class.get_attempts_expire_in.ago }
+          if abuser.bananas_attempts.blank?
+            fresh_attempts = []
+          else
+            fresh_attempts = abuser.bananas_attempts.delete_if { |a| a < self.class.get_attempts_expire_in.ago }
+          end
           fresh_attempts << Time.now
           if fresh_attempts.size > self.class.get_allowed_attempts
             abuser.update_attributes(:bananas_attempts => [])
