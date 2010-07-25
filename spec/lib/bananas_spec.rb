@@ -11,8 +11,7 @@ class SomeController < ApplicationController
   end
   def action_that_casts_reports
     bananas_attempts = []
-    11.times { bananas_attempts << 30.seconds.ago }
-    u = BananasUser.create(:login => "user", :bananas_attempts => bananas_attempts)
+    u = BananasUser.create(:login => "user", :bananas_attempts => [30.seconds.ago]*11)
     cast_my_spam_report(u.id)
   end
 end
@@ -24,11 +23,11 @@ describe SomeController, :type => :controller do
   end
 
   describe "bananas report checks" do
-    
+
     after(:each) do
       MySpamReport.find(:all).each { |r| r.destroy }
     end
-    
+
     it "renders 403 page if the report exists" do
       MySpamReport.create(:ip_address => "127.0.0.1")
       get :action_that_checks_reports
