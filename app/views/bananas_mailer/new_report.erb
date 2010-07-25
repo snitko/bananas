@@ -4,5 +4,5 @@ Someone has been trying to access app resources for more than<%= @report.class.g
 Someone's ip address is: <%= @report.ip_address %>
 
 This ip has been blocked.
-To unblock it, visit this page: <%= self.send("#{@report.class.snake_name(:plural => true)}_url")" %>
+To unblock it, visit this page: <%= self.send("#{@report.class.snake_name(:plural => true)}_url") %>
 and delete the report.
