@@ -1,6 +1,9 @@
 Bananas - a simple ip addresses and spam manager for Rails 
 ==========================================================
 
+Author: Roman Snitko
+Contributions: Denis Lifanov
+
 **Bananas** does three things:
   *  Watches requests from a particular ip address and files a report if requests happen too often
   (+ emails you, if you want that).
@@ -8,6 +11,8 @@ Bananas - a simple ip addresses and spam manager for Rails
   *  Provides an interface to manage those reports.
 
 (Currently works on Rails 2.3, will support Rails 3 next week)
+
+If you hate reading docs, go see the screencast: http://vimeo.com/13620290 
 
 Installation
 ============
@@ -130,9 +135,10 @@ Now what you should know is that attempts are represented by timestamps.
 Depending on the value of the `attempts_storage` option in `SpamReport` (:active_record or :cache) 
 they're either stored in the `bananas_report` field of the `User` or in cache.
 
-The latter is understandably faster, as you avoid 1 extra query to the database
-(it is needed to update the `bananas_report` field). However, you would also need to configure your
-cache storage (documentation on this is coming).
+The latter is understandably faster, as you avoid 1 extra query to the database.
+All you need to do is to provide an extra argument containing the cache storage:
+
+    attempts_storage :cache, my_cache_storage
 
 Alternatively, you can redefine `#check_number_of_attempts` method and store things
 elsewhere.
