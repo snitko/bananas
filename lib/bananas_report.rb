@@ -99,17 +99,17 @@ module Bananas
 
         def check_number_of_attempts
           return true if abuser.nil?
-          attempts = bananas_attempts_for(abuser)
+          attempts = bananas_attempts
           if attempts.blank?
             fresh_attempts = []
           else
             fresh_attempts = attempts.delete_if { |a| a < self.class.get_attempts_expire_in.ago }
           end
           if fresh_attempts.size >= self.class.get_allowed_attempts
-            set_bananas_attempts(abuser, [])
+            set_bananas_attempts([])
           else
-            fresh_attempts << Time.now
-            set_bananas_attempts(abuser, fresh_attempts)
+            fresh_attempts << Time.now.utc
+            set_bananas_attempts(fresh_attempts)
             errors.add("Not enough bananas attempts to file a report")
           end
         end
@@ -126,11 +126,11 @@ module Bananas
 
         private
 
-        def bananas_attempts_for(abuser)
+        def bananas_attempts
           abuser.bananas_attempts
         end
 
-        def set_bananas_attempts_for(abuser, value)
+        def set_bananas_attempts(value)
           abuser.update_attributes(:bananas_attempts => value)
         end
 
@@ -148,17 +148,17 @@ module Bananas
 
         private
 
-        def bananas_attempts_cache_key_for(abuser)
+        def bananas_attempts_cache_key
           "bananas/attempts/#{abuser.id}" # FIXME: serialize into session
         end
 
-        def bananas_attempts_for(abuser)
-          key = bananas_attempts_cache_key_for(abuser)
+        def bananas_attempts
+          key = bananas_attempts_cache_key
           self.class.bananas_attempts_cache.fetch(key)
         end
 
-        def set_bananas_attempts_for(abuser, value)
-          key = bananas_attempts_cache_key_for(abuser)
+        def set_bananas_attempts(value)
+          key = bananas_attempts_cache_key
           self.class.bananas_attempts_cache.write(key, value, :expires_in => self.class.get_attempts_expire_in)
         end
 
