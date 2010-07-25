@@ -1,7 +1,7 @@
 Bananas - a simple ip addresses and spam manager for Rails 
 ==========================================================
 
-_Bananas_ does three things:
+**Bananas** does three things:
   *  Watches requests from a particular ip address and files a report if requests happen too often
   (+ emails you, if you want that).
   *  Blocks access from ip addresses that have been filed in reports.
@@ -48,8 +48,8 @@ passed since its last call is less than a certain value and if there's been a ce
 of attempts to create a spam report (now would be the good time to take a look at your `SpamReport`
 class and the default settings that's been generated there for you). This method takes one argument,
 which is the id of the abuser (in our case it's `User`). The argument is optional, but again it's necessary
-if you're using ActiveRecord as the "attempts" storage - _otherwise the plugin would file the report
-unconditionally!_ Here's an example of how it can be used:
+if you're using ActiveRecord as the "attempts" storage - **otherwise the plugin would file the report
+unconditionally!** Here's an example of how it can be used:
 
     class PostsController
       def create
