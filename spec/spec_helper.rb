@@ -6,6 +6,7 @@ require File.expand_path(File.join(ENV['RAILS_ROOT'], 'spec/spec_helper.rb'))
 
 ActionController::Routing::Routes.draw do |map|
   map.resources :my_spam_reports
+  map.resources :another_spam_reports
 end
 
 class BananasUser < ActiveRecord::Base; end
