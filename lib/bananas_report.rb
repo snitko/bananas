@@ -99,17 +99,13 @@ module Bananas
 
         def check_number_of_attempts
           return true if abuser.nil?
-          attempts = bananas_attempts
-          if attempts.blank?
-            fresh_attempts = []
-          else
-            fresh_attempts = attempts.delete_if { |a| a < self.class.get_attempts_expire_in.ago }
-          end
-          if fresh_attempts.size >= self.class.get_allowed_attempts
+          attempts = bananas_attempts || []
+          attempts.reject! { |a| a < self.class.get_attempts_expire_in.ago } unless attempts.empty?
+          if attempts.size >= self.class.get_allowed_attempts
             set_bananas_attempts([])
           else
-            fresh_attempts << Time.now.utc
-            set_bananas_attempts(fresh_attempts)
+            attempts << Time.now.utc
+            set_bananas_attempts(attempts)
             errors.add("Not enough bananas attempts to file a report")
           end
         end
