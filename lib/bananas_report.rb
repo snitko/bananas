@@ -3,10 +3,10 @@ module Bananas
 
     def self.included(c)
 
-      class<<c
+      class << c
 
         attr_reader :abuser
-        
+
         def create_conditions
           @create_conditions ||= [:check_number_of_attempts]
         end
@@ -23,6 +23,7 @@ module Bananas
         def allowed_attempts(number)
           @allowed_attempts = number
         end
+
         def get_allowed_attempts
           @allowed_attempts ||= 10
         end
@@ -30,18 +31,24 @@ module Bananas
         def attempts_expire_in(time)
           @attempts_expire_in = time
         end
+
         def get_attempts_expire_in
           @attempts_expire_in ||= 10.minutes
         end
 
-        def attempts_storage(type)
-          include AttemptsStorage::const_get(type.to_s.camelcase)
+        def attempts_storage(kind, storage = nil)
+          mod = AttemptsStorage::const_get(kind.to_s.camelcase)
+          if Cache == mod
+            raise unless storage
+            include mod
+            self.bananas_attempts_cache = storage
+          else
+            include mod
+          end
         end
 
         def cast(attrs)
-          if !(report = self.find_by_ip_address(attrs[:ip_address]))
-            report = self.new(attrs)
-          end
+          report = self.find_or_initialize_by_ip_address(attrs[:ip_address])
           report.abuser_id = attrs[:abuser_id] if attrs[:abuser_id]
           report.check_create_conditions
           report.counter += 1
@@ -56,16 +63,16 @@ module Bananas
           name = name.pluralize if options[:plural]
           return name.downcase if self =~ /^[A-Z]+$/
           name.gsub(/([A-Z]+)(?=[A-Z][a-z]?)|\B[A-Z]/, '_\&') =~ /_*(.*)/
-            return $+.downcase
+          return $+.downcase
         end
 
         private
 
-          def create_condition(c)
-            create_conditions
-            @create_conditions << c if c.kind_of?(Symbol)
-            @create_conditions += c if c.kind_of?(Array)
-          end
+        def create_condition(c)
+          create_conditions
+          @create_conditions << c if c.kind_of?(Symbol)
+          @create_conditions += c if c.kind_of?(Array)
+        end
 
       end
 
@@ -81,35 +88,79 @@ module Bananas
 
     module AttemptsStorage
 
+      module Common
+
+        def bananas_attempts_for(abuser)
+          raise NotImplementedError
+        end
+
+        def set_bananas_attempts_for(abuser)
+          raise NotImplementedError
+        end
+
+        def check_number_of_attempts
+          return true if abuser.nil?
+          attempts = bananas_attempts_for(abuser)
+          if attempts.blank?
+            fresh_attempts = []
+          else
+            fresh_attempts = attempts.delete_if { |a| a < self.class.get_attempts_expire_in.ago }
+          end
+          if fresh_attempts.size >= self.class.get_allowed_attempts
+            set_bananas_attempts(abuser, [])
+          else
+            fresh_attempts << Time.now
+            set_bananas_attempts(abuser, fresh_attempts)
+            errors.add("Not enough bananas attempts to file a report")
+          end
+        end
+
+      end
+
       module ActiveRecord
+
+        include Common
 
         def self.included(base)
           const_get(base.abuser.to_s.camelcase).class_eval { serialize :bananas_attempts }
         end
 
         private
-        def check_number_of_attempts
-          return true if abuser.nil?
-          if abuser.bananas_attempts.blank?
-            fresh_attempts = []
-          else
-            fresh_attempts = abuser.bananas_attempts.delete_if { |a| a < self.class.get_attempts_expire_in.ago }
-          end
-          fresh_attempts << Time.now
-          if fresh_attempts.size > self.class.get_allowed_attempts
-            abuser.update_attributes(:bananas_attempts => [])
-          else
-            abuser.update_attributes(:bananas_attempts => fresh_attempts)
-            errors.add("Not enough bananas attempts to file a report")
-          end
+
+        def bananas_attempts_for(abuser)
+          abuser.bananas_attempts
         end
+
+        def set_bananas_attempts_for(abuser, value)
+          abuser.update_attributes(:bananas_attempts => value)
+        end
+
       end
 
       module Cache
-        private
-        def check_number_of_attempts
-          throw "Nothing here yet"
+
+        include Common
+
+        def self.included(base)
+          base.send(:attr_accessor, :bananas_attempts_cache)
         end
+
+        private
+
+        def bananas_attempts_cache_key_for(abuser)
+          "bananas/attempts/#{abuser.id}" # FIXME: serialize into session
+        end
+
+        def bananas_attempts_for(abuser)
+          key = bananas_attempts_cache_key_for(abuser)
+          self.class.bananas_attempts_cache.fetch(key)
+        end
+
+        def set_bananas_attempts_for(abuser, value)
+          key = bananas_attempts_cache_key_for(abuser)
+          self.class.bananas_attempts_cache.write(key, value, :expires_in => self.class.get_attempts_expire_in)
+        end
+
       end
 
     end
