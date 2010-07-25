@@ -37,13 +37,12 @@ module Bananas
         end
 
         def attempts_storage(kind, storage = nil)
-          mod = AttemptsStorage::const_get(kind.to_s.camelcase)
-          if Cache == mod
+          if 'Cache' == (mod = kind.to_s.camelcase)
             raise unless storage
-            include mod
+            include AttemptsStorage::const_get(mod)
             self.bananas_attempts_cache = storage
           else
-            include mod
+            include AttemptsStorage::const_get(mod)
           end
         end
 
@@ -142,7 +141,9 @@ module Bananas
         include Common
 
         def self.included(base)
-          base.send(:attr_accessor, :bananas_attempts_cache)
+          class << base
+            attr_accessor :bananas_attempts_cache
+          end
         end
 
         private
