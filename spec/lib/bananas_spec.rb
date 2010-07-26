@@ -59,7 +59,7 @@ class AnotherController < ApplicationController
 
   def action_that_casts_reports
     u = AnotherUser.create(:login => "user")
-    CustomCacheStore.write("bananas/attempts/#{u.id}", [30.seconds.ago]*11)
+    CustomCacheStore.write("bananas/attempts/127.0.0.1", [30.seconds.ago]*11)
     cast_another_spam_report(u.id)
   end
 

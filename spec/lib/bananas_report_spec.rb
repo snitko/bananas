@@ -6,10 +6,6 @@ shared_examples_for("spam_report") do
     @_SpamReport.cast(:ip_address => "127.0.0.1", :abuser_id => @abuser.id).id.should_not be_nil
   end
 
-  it "does not create a new record if the report conditions are false" do
-    abuser = @_User.create(:bananas_attempts => [30.seconds.ago, 50.seconds.ago])
-    @_SpamReport.cast(:ip_address => "127.0.0.1", :abuser_id => abuser.id).id.should be_nil
-  end
 
   it "sends an email to admin when a new report is added" do
     BananasMailer.should_receive(:deliver_new_report).once
@@ -17,8 +13,9 @@ shared_examples_for("spam_report") do
   end
 
   it "counts the number of times a report has been added for the same ip" do
-    @_SpamReport.cast(:ip_address => "127.0.0.1", :abuser_id => @abuser.id).counter.should be(1)
-    @_SpamReport.cast(:ip_address => "127.0.0.1").counter.should be(2)
+    @_SpamReport.cast(:ip_address => "127.0.0.1", :abuser_id => @abuser.id)
+    11.times { @_SpamReport.cast(:ip_address => "127.0.0.1", :abuser_id => @abuser.id) }
+    @_SpamReport.cast(:ip_address => "127.0.0.1", :abuser_id => @abuser.id).counter.should be(2)
   end
 
 end
@@ -45,6 +42,11 @@ describe MySpamReport do
     @abuser.reload.bananas_attempts.size.should be(1)
   end
 
+  it "does not create a new record if the report conditions are false" do
+    abuser = @_User.create(:bananas_attempts => [30.seconds.ago, 50.seconds.ago])
+    @_SpamReport.cast(:ip_address => "127.0.0.1", :abuser_id => abuser.id).id.should be_nil
+  end
+
 end
 
 describe AnotherSpamReport, "with cache storage" do
@@ -58,9 +60,14 @@ describe AnotherSpamReport, "with cache storage" do
     AnotherSpamReport.find(:all).each { |r| r.destroy }
     AnotherUser.find(:all).each { |u| u.destroy }
     @abuser = AnotherUser.create
-    CustomCacheStore.write("bananas/attempts/#{@abuser.id}", [30.seconds.ago]*11)
+    CustomCacheStore.write("bananas/attempts/127.0.0.1", [30.seconds.ago]*11)
   end
 
   it_should_behave_like "spam_report"
+
+  it "does not create a new record if the report conditions are false" do
+    CustomCacheStore.write("bananas/attempts/127.0.0.1", [30.seconds.ago])
+    @_SpamReport.cast(:ip_address => "127.0.0.1").id.should be_nil
+  end
 
 end

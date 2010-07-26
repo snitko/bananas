@@ -44,13 +44,16 @@ module Bananas
           else
             include AttemptsStorage::const_get(mod)
           end
+          @attempts_storage = kind
+        end
+        def get_attempts_storage
+          @attempts_storage
         end
 
         def cast(attrs)
           report = self.find_or_initialize_by_ip_address(attrs[:ip_address])
           report.abuser_id = attrs[:abuser_id] if attrs[:abuser_id]
-          report.check_create_conditions
-          report.counter += 1
+          report.check_create_conditions 
           if report.errors.empty? && report.save
             BananasMailer.deliver_new_report(report, @admin_emails) unless @admin_emails.blank?
           end
@@ -98,10 +101,10 @@ module Bananas
         end
 
         def check_number_of_attempts
-          return true if abuser.nil?
           attempts = bananas_attempts || []
           attempts.reject! { |a| a < self.class.get_attempts_expire_in.ago } unless attempts.empty?
           if attempts.size >= self.class.get_allowed_attempts
+            self.counter += 1
             set_bananas_attempts([])
           else
             attempts << Time.now.utc
@@ -118,6 +121,11 @@ module Bananas
 
         def self.included(base)
           const_get(base.abuser.to_s.camelcase).class_eval { serialize :bananas_attempts }
+        end
+
+        def check_number_of_attempts
+          return true unless abuser_id
+          super
         end
 
         private
@@ -145,7 +153,9 @@ module Bananas
         private
 
         def bananas_attempts_cache_key
-          "bananas/attempts/#{abuser.id}" # FIXME: serialize into session
+          # Using ip_address as a key instead of abuser_id -
+          # No abuser_id dependency when storing attempts in cache!
+          "bananas/attempts/#{ip_address}" # FIXME: serialize into session
         end
 
         def bananas_attempts
