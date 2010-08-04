@@ -109,7 +109,7 @@ module Bananas
           else
             attempts << Time.now.utc
             set_bananas_attempts(attempts)
-            errors.add("Not enough bananas attempts to file a report")
+            errors.add(:base, "Not enough bananas attempts to file a report")
           end
         end
 
