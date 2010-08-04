@@ -11,6 +11,19 @@ end
 
 describe MySpamReportsController, :type => :controller do
 
+  # We need this line because, apprently, rspec2 ignores the :type option
+  include RSpec::Rails::ControllerExampleGroup
+
+  before(:all) do
+    views_path = "#{File.dirname(__FILE__)}/../../app/views/my_spam_reports"
+    `mkdir #{views_path}`
+    `touch #{views_path}/show.html.erb`
+  end
+
+  after(:all) do
+    `rm -rf #{File.dirname(__FILE__)}/../../app/views/my_spam_reports`
+  end
+
   describe "index action" do
 
     it "shows reports if the user is authorized" do

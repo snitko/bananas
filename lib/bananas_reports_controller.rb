@@ -45,7 +45,7 @@ module Bananas
 
     def show
       @report = self.class.get_report_class.find_by_ip_address(params[:id])
-      render :file => "#{RAILS_ROOT}/public/404.html" unless @report
+      render :file => "#{Rails.root}/public/404.html" unless @report
     end
 
     def destroy
