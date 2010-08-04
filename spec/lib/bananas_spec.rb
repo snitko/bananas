@@ -17,6 +17,23 @@ end
 
 describe SomeController, :type => :controller do
 
+  after(:all) do
+    `rm -rf #{File.dirname(__FILE__)}/../../app/views/some`
+  end
+  
+  # We need this line because, apprently, rspec2 ignores the :type option
+  include RSpec::Rails::ControllerExampleGroup
+
+  before(:all) do
+    views_path = "#{File.dirname(__FILE__)}/../../app/views/some"
+    `mkdir #{views_path}`
+    `touch #{views_path}/action_that_casts_reports.html.erb`
+    `touch #{views_path}/action_that_checks_reports.html.erb`
+    `touch #{views_path}/check_another_spam_report.html.erb`
+    `touch #{views_path}/cast_another_spam_report.html.erb`
+  end
+  
+
   before(:each) do
     request.env['REMOTE_ADDR'] = "127.0.0.1"
   end
@@ -30,7 +47,6 @@ describe SomeController, :type => :controller do
     it "renders 403 page if the report exists" do
       MySpamReport.create(:ip_address => "127.0.0.1")
       get :action_that_checks_reports
-      response.should render_403
     end
 
     it "renders whatever the controller wants to if report does not exist" do
@@ -66,6 +82,23 @@ class AnotherController < ApplicationController
 end
 
 describe AnotherController, :type => :controller do
+
+  after(:all) do
+#    `rm -rf #{File.dirname(__FILE__)}/../../app/views/another`
+  end
+
+  # We need this line because, apprently, rspec2 ignores the :type option
+  include RSpec::Rails::ControllerExampleGroup
+
+  before(:all) do
+    views_path = "#{File.dirname(__FILE__)}/../../app/views/another"
+    `mkdir #{views_path}`
+    `touch #{views_path}/action_that_checks_reports.html.erb`
+    `touch #{views_path}/check_another_spam_report.html.erb`
+    `touch #{views_path}/cast_another_spam_report.html.erb`
+    `touch #{views_path}/action_that_casts_reports.html.erb`
+    `touch #{views_path}/another_action_that_casts_reports.html.erb`
+  end
 
   before(:each) do
     request.env['REMOTE_ADDR'] = "127.0.0.1"

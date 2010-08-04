@@ -1,12 +1,17 @@
 require File.dirname(__FILE__) + '/../init.rb'
+require 'sqlite3'
 
 ENV['RAILS_ENV'] = 'test'
 ENV['RAILS_ROOT'] ||= File.dirname(__FILE__) + '/../../../..'
 require File.expand_path(File.join(ENV['RAILS_ROOT'], 'spec/spec_helper.rb'))
 
+@file_404 = { :file => "#{RAILS_ROOT}/public/403.html" }
+@file_403 = { :file => "#{RAILS_ROOT}/public/403.html" }
+
 ActionController::Routing::Routes.draw do |map|
-  map.resources :my_spam_reports
-  map.resources :another_spam_reports
+  resources :my_spam_reports
+  resources :another_spam_reports
+  match '/:controller(/:action(/:id))'
 end
 
 class BananasUser < ActiveRecord::Base; end

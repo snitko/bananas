@@ -1,2 +1,5 @@
 spec/bananas_plugin.sqlite3.db
 spec/debug.log
+
+app/views/some
+app/views/another
