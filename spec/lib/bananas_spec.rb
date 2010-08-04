@@ -84,7 +84,7 @@ end
 describe AnotherController, :type => :controller do
 
   after(:all) do
-#    `rm -rf #{File.dirname(__FILE__)}/../../app/views/another`
+    `rm -rf #{File.dirname(__FILE__)}/../../app/views/another`
   end
 
   # We need this line because, apprently, rspec2 ignores the :type option
