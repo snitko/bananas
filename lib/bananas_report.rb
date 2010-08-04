@@ -102,7 +102,7 @@ module Bananas
 
         def check_number_of_attempts
           attempts = bananas_attempts || []
-          attempts.reject! { |a| a < self.class.get_attempts_expire_in.ago } unless attempts.empty?
+          attempts = attempts.reject { |a| a < self.class.get_attempts_expire_in.ago } unless attempts.empty?
           if attempts.size >= self.class.get_allowed_attempts
             self.counter += 1
             set_bananas_attempts([])
