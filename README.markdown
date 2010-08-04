@@ -10,7 +10,7 @@ Contributions: Denis Lifanov
   *  Blocks access from ip addresses that have been filed in reports.
   *  Provides an interface to manage those reports.
 
-(Currently works on Rails 2.3, will support Rails 3 next week)
+Supports Rails 3.0.0rc. If you want Rails 2.3 version, check out the "rails2.3" branch.
 
 If you hate reading docs, go see the screencast: http://vimeo.com/13620290 
 
