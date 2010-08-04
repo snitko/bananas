@@ -8,7 +8,9 @@ shared_examples_for("spam_report") do
 
 
   it "sends an email to admin when a new report is added" do
-    BananasMailer.should_receive(:deliver_new_report).once
+    allow_message_expectations_on_nil
+    BananasMailer.stub!(:new_report)
+    BananasMailer.new_report.should_receive(:deliver).once
     @_SpamReport.cast(:ip_address => "127.0.0.1", :abuser_id => @abuser.id)
   end
 

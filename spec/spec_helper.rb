@@ -5,6 +5,7 @@ ENV['RAILS_ENV'] = 'test'
 ENV['RAILS_ROOT'] ||= File.dirname(__FILE__) + '/../../../..'
 require File.expand_path(File.join(ENV['RAILS_ROOT'], 'spec/spec_helper.rb'))
 
+
 Rails.application.routes.draw do
   resources :my_spam_reports
   resources :another_spam_reports

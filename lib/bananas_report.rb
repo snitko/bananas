@@ -55,7 +55,7 @@ module Bananas
           report.abuser_id = attrs[:abuser_id] if attrs[:abuser_id]
           report.check_create_conditions 
           if report.errors.empty? && report.save
-            BananasMailer.deliver_new_report(report, @admin_emails) unless @admin_emails.blank?
+            BananasMailer.new_report(report, @admin_emails).deliver unless @admin_emails.blank?
           end
           return report
         end

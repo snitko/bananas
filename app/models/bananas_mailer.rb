@@ -1,11 +1,11 @@
 class BananasMailer < ActionMailer::Base
   
+  default :from => "bananas@#{default_url_options[:host]}"
+
   def new_report(report, emails)
-    subject       "New Bananas Report"
-    from          "bananas@#{default_url_options[:host]}"
-    recipients    emails
-    sent_on       Time.now
-    body          :report => report
+    @report = report
+    mail :to => emails,
+         :subject => "New Bananas Report"
   end
 
 end
