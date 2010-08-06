@@ -18,7 +18,7 @@
       <td><%= link_to r.abuser.id, r.abuser if r.abuser %></td>
       <td><%= r.counter %></td>
       <td><%= r.created_at %></td>
-      <td><%= link_to "delete", self.send("#{@report_class}_path".to_sym, r), :confirm => "Are you sure?", :method => "delete" %></td>
+      <td><%= link_to "delete", self.send("#{@report_class}_path".to_sym, r), "data-confirm" => "Are you sure?", "data-method" => :delete %></td>
     </tr>
 
   <% end %>
