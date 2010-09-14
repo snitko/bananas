@@ -1,0 +1,21 @@
+class Create<%=report_model_name.pluralize.camelcase%> < ActiveRecord::Migration
+  def self.up
+    create_table :<%= report_model_name.pluralize %> do |t|
+      t.string   :ip_address
+      t.integer  :counter,     :default => 0
+      t.integer  :abuser_id
+      t.timestamps
+    end
+    add_index :<%= report_model_name.pluralize %>, :ip_address, :unique => true
+    <%- if abuser_model_name -%>
+    add_column :<%= abuser_model_name.pluralize %>, :bananas_attempts, :text
+    <%- end -%>
+  end
+
+  def self.down
+    drop_table    :<%= report_model_name.pluralize %>
+    <%- if abuser_model_name -%>
+    remove_column :<%= abuser_model_name.pluralize %>, :bananas_attempts
+    <%- end -%>
+  end
+end
