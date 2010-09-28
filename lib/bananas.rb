@@ -22,7 +22,7 @@ module Bananas
             abuser_id = nil
           end
           abuser_id = abuser if abuser.kind_of?(Integer)
-          report_class.cast(:ip_address => request.env['REMOTE_ADDR'], :abuser_id => abuser_id)
+          report_class.cast(:ip_address => request.remote_ip, :abuser_id => abuser_id)
         end
 
       end
