@@ -160,7 +160,7 @@ module Bananas
 
         def bananas_attempts
           key = bananas_attempts_cache_key
-          self.class.bananas_attempts_cache.fetch(key)
+          self.class.bananas_attempts_cache.fetch(key).dup # dup helps to avoid frozen array exception
         end
 
         def set_bananas_attempts(value)

@@ -4,13 +4,24 @@ require 'sqlite3'
 ENV['RAILS_ENV'] = 'test'
 ENV['RAILS_ROOT'] ||= File.dirname(__FILE__) + '/../../../..'
 require File.expand_path(File.join(ENV['RAILS_ROOT'], 'spec/spec_helper.rb'))
+Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 
 
-Rails.application.routes.draw do
-  resources :my_spam_reports
-  resources :another_spam_reports
-  match '/:controller(/:action(/:id))'
+begin
+  _routes = Rails.application.routes
+  _routes.disable_clear_and_finalize = true
+  _routes.clear!
+  Rails.application.routes_reloader.paths.each{ |path| load(path) }
+  _routes.draw do
+    resources :my_spam_reports
+    resources :another_spam_reports
+    match '/:controller(/:action(/:id))'
+  end
+  ActiveSupport.on_load(:action_controller) { _routes.finalize! }
+ensure
+  _routes.disable_clear_and_finalize = false
 end
+
 
 class BananasUser < ActiveRecord::Base; end
 class AnotherUser < ActiveRecord::Base; end
