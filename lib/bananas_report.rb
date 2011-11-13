@@ -54,9 +54,10 @@ module Bananas
           report = self.find_or_initialize_by_ip_address(attrs[:ip_address])
           report.abuser_id = attrs[:abuser_id] if attrs[:abuser_id]
           report.check_create_conditions 
-          if report.errors.empty? && report.save
+          if report.errors.empty? && report.new_record?
             BananasMailer.new_report(report, @admin_emails).deliver unless @admin_emails.blank?
           end
+          report.save if report.errors.empty?
           return report
         end
 
